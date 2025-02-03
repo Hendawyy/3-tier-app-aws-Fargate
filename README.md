@@ -54,8 +54,8 @@ Before you begin, ensure you have the following installed:
 - Clone the Repository:
 
 ```bash
-    git clone https://github.com/Hendawyy/AlgoCASTask1.git
-    cd AlgoCASTask1
+    git clone https://github.com/Hendawyy/3-tier-app-aws-Faragate.git
+    cd 3-tier-app-aws-Faragate
 ```
 
 - Initialize Terraform:
