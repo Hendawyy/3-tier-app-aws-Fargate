@@ -16,6 +16,4 @@ resource "aws_db_instance" "mysql" {
   db_subnet_group_name      = aws_db_subnet_group.dbsubnet.name
   skip_final_snapshot       = false
   final_snapshot_identifier = "final-snapshot"
-
-
 }

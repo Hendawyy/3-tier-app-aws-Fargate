@@ -6,6 +6,10 @@ terraform {
     }
   }
 }
+provider "aws" {
+  region  = "us-east-1"
+  profile = "DevOps-Intern-Seif-Hendawy"
+}
 
 module "vpc" {
   source = "./modules/vpc"

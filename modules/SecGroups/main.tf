@@ -1,8 +1,10 @@
 resource "aws_security_group" "alb" {
-
-  vpc_id = var.vpc_id
+  name        = "application-loadbalancer-sg"
+  description = "Security group for loadbalancer services"
+  vpc_id      = var.vpc_id
 
   ingress {
+    description = "HTTP from Anywhere"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
@@ -23,9 +25,12 @@ resource "aws_security_group" "alb" {
 
 resource "aws_security_group" "fe" {
 
-  vpc_id = var.vpc_id
+  name        = "application-frontend-sg"
+  description = "Security group for frontend services"
+  vpc_id      = var.vpc_id
 
   ingress {
+    description     = "HTTP from ALB"
     from_port       = 80
     to_port         = 80
     protocol        = "tcp"
@@ -46,9 +51,12 @@ resource "aws_security_group" "fe" {
 
 resource "aws_security_group" "be" {
 
-  vpc_id = var.vpc_id
+  name        = "application-backend-sg"
+  description = "Security group for backend services"
+  vpc_id      = var.vpc_id
 
   ingress {
+    description     = "requests from FrontEnd"
     from_port       = 8080
     to_port         = 8080
     protocol        = "tcp"
@@ -69,9 +77,12 @@ resource "aws_security_group" "be" {
 
 resource "aws_security_group" "db" {
 
-  vpc_id = var.vpc_id
+  name        = "application-db-sg"
+  description = "Security group for database services"
+  vpc_id      = var.vpc_id
 
   ingress {
+    description     = "requests from Back End"
     from_port       = 3306
     to_port         = 3306
     protocol        = "tcp"

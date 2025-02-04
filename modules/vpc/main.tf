@@ -1,6 +1,8 @@
 resource "aws_vpc" "my_vpc" {
 
-  cidr_block = "10.0.0.0/16"
+  cidr_block           = var.cidr_block
+  enable_dns_hostnames = true
+  enable_dns_support   = true
   tags = {
     Name = "My VPC"
   }
@@ -12,6 +14,10 @@ resource "aws_subnet" "public_subnet" {
   cidr_block              = cidrsubnet(aws_vpc.my_vpc.cidr_block, 8, count.index)
   availability_zone       = element(["us-east-1a", "us-east-1b"], count.index)
   map_public_ip_on_launch = true
+  tags = {
+    Name = "Public Subnet ${count.index + 1}"
+    Type = "Public"
+  }
 }
 
 resource "aws_subnet" "private_subnet" {
@@ -19,6 +25,10 @@ resource "aws_subnet" "private_subnet" {
   vpc_id            = aws_vpc.my_vpc.id
   cidr_block        = cidrsubnet(aws_vpc.my_vpc.cidr_block, 8, count.index + 2)
   availability_zone = element(["us-east-1a", "us-east-1b"], count.index)
+  tags = {
+    Name = "Private Subnet ${count.index + 1}"
+    Type = "Private"
+  }
 }
 
 resource "aws_internet_gateway" "igw" {
