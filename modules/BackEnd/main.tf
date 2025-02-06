@@ -64,9 +64,11 @@ resource "aws_lb_listener" "backend" {
   }
 }
 
-
+resource "random_id" "suffix" {
+  byte_length = 4
+}
 resource "aws_lb_target_group" "backend" {
-  name     = "backend-tg"
+  name     = "be-tg-${random_id.suffix.hex}"
   port     = 8080
   protocol = "HTTP"
   vpc_id   = var.vpc_id

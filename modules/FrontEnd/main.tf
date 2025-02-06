@@ -55,8 +55,12 @@ resource "aws_lb" "frontend" {
   subnets            = var.public_subnets
 }
 
+resource "random_id" "suffix" {
+  byte_length = 4
+}
+
 resource "aws_lb_target_group" "frontend" {
-  name     = "frontend-tg"
+  name     = "fe-tg-${random_id.suffix.hex}"
   port     = 80
   protocol = "HTTP"
   vpc_id   = var.vpc_id
