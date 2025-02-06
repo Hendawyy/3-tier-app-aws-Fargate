@@ -44,6 +44,7 @@ resource "aws_ecs_service" "frontend" {
     container_name   = "frontend-container"
     container_port   = 80
   }
+  force_new_deployment = true
 }
 
 resource "aws_lb" "frontend" {

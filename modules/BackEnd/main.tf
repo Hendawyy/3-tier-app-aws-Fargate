@@ -43,6 +43,8 @@ resource "aws_ecs_service" "backend" {
     container_name   = "backend-container"
     container_port   = 8080
   }
+
+  force_new_deployment = true
 }
 resource "aws_lb" "backend" {
   name               = "backend-alb"
