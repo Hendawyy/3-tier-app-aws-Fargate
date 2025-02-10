@@ -14,17 +14,25 @@ resource "aws_ecs_task_definition" "frontend" {
 
   container_definitions = jsonencode([
     {
-      name  = "frontend-container"
-      image = var.fe_image
+      name        = "frontend-container"
+      networkMode = "awsvpc"
+      image       = var.fe_image
+      essential   = true
       portMappings = [
         {
           containerPort = 80
           hostPort      = 80
+          protocol      = "tcp"
         }
       ]
     }
   ])
+
+  tags = {
+    Name = "frontend-task"
+  }
 }
+
 resource "aws_ecs_service" "frontend" {
   name            = "frontend-service"
   cluster         = aws_ecs_cluster.frontend.id
@@ -60,10 +68,15 @@ resource "random_id" "suffix" {
 }
 
 resource "aws_lb_target_group" "frontend" {
-  name     = "fe-tg-${random_id.suffix.hex}"
-  port     = 80
-  protocol = "HTTP"
-  vpc_id   = var.vpc_id
+  name        = "fe-tg-${random_id.suffix.hex}"
+  port        = 80
+  protocol    = "HTTP"
+  vpc_id      = var.vpc_id
+  target_type = "ip"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 
 }
 

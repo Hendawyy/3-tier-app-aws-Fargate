@@ -13,16 +13,22 @@ resource "aws_ecs_task_definition" "backend" {
 
   container_definitions = jsonencode([
     {
-      name  = "backend-container"
-      image = var.be_image
+      name        = "backend-container"
+      networkMode = "awsvpc"
+      image       = var.be_image
+      essential   = true
       portMappings = [
         {
           containerPort = 8080
           hostPort      = 8080
+          protocol      = "tcp"
         }
       ]
     }
   ])
+  tags = {
+    Name = "backend-task"
+  }
 }
 resource "aws_ecs_service" "backend" {
   name            = "backend-service"
@@ -68,8 +74,13 @@ resource "random_id" "suffix" {
   byte_length = 4
 }
 resource "aws_lb_target_group" "backend" {
-  name     = "be-tg-${random_id.suffix.hex}"
-  port     = 8080
-  protocol = "HTTP"
-  vpc_id   = var.vpc_id
+  name        = "be-tg-${random_id.suffix.hex}"
+  port        = 8080
+  protocol    = "HTTP"
+  vpc_id      = var.vpc_id
+  target_type = "ip"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
