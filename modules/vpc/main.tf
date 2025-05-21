@@ -52,23 +52,23 @@ resource "aws_route_table_association" "pbrtbassoc" {
 }
 
 
-# resource "aws_eip" "nat" {
-#   count = 1
-# }
+resource "aws_eip" "nat" {
+  count = 1
+}
 
-# resource "aws_nat_gateway" "ngw" {  
-#   allocation_id = aws_eip.nat[0].id
-#   subnet_id     = aws_subnet.public_subnet[0].id
-#   count         = 1
-# }
+resource "aws_nat_gateway" "ngw" {
+  allocation_id = aws_eip.nat[0].id
+  subnet_id     = aws_subnet.public_subnet[0].id
+  count         = 1
+}
 
 resource "aws_route_table" "prvrtb" {
   vpc_id = aws_vpc.my_vpc.id
 
-  # route {
-  #   cidr_block     = "0.0.0.0/0"
-  #   nat_gateway_id = aws_nat_gateway.ngw[0].id
-  # }
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.ngw[0].id
+  }
 
 }
 

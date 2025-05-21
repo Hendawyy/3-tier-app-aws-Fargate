@@ -16,3 +16,6 @@ variable "alb_Sec_group" {
 variable "fe_image" {
   description = "The FrontEnd Container Image"
 }
+variable "be_alb_dns_name" {
+  description = "Backend DNS LB"
+}

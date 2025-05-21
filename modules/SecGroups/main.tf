@@ -57,8 +57,8 @@ resource "aws_security_group" "be" {
 
   ingress {
     description     = "requests from FrontEnd"
-    from_port       = 8080
-    to_port         = 8080
+    from_port       = 3000
+    to_port         = 3000
     protocol        = "tcp"
     security_groups = [aws_security_group.fe.id]
   }
@@ -100,4 +100,3 @@ resource "aws_security_group" "db" {
     Name = "Database"
   }
 }
-

@@ -19,8 +19,8 @@ resource "aws_ecs_task_definition" "backend" {
       essential   = true
       portMappings = [
         {
-          containerPort = 8080
-          hostPort      = 8080
+          containerPort = 3000
+          hostPort      = 3000
           protocol      = "tcp"
         }
       ]
@@ -47,7 +47,7 @@ resource "aws_ecs_service" "backend" {
   load_balancer {
     target_group_arn = aws_lb_target_group.backend.arn
     container_name   = "backend-container"
-    container_port   = 8080
+    container_port   = 3000
   }
 
   force_new_deployment = true
@@ -62,7 +62,7 @@ resource "aws_lb" "backend" {
 
 resource "aws_lb_listener" "backend" {
   load_balancer_arn = aws_lb.backend.arn
-  port              = 8080
+  port              = 3000
   protocol          = "HTTP"
   default_action {
     type             = "forward"
@@ -75,10 +75,19 @@ resource "random_id" "suffix" {
 }
 resource "aws_lb_target_group" "backend" {
   name        = "be-tg-${random_id.suffix.hex}"
-  port        = 8080
+  port        = 3000
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "ip"
+
+  health_check {
+    path                = "/api/increment"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    matcher             = "200-399"
+  }
 
   lifecycle {
     create_before_destroy = true
